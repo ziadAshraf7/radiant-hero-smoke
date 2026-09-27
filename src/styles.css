@@ -60,6 +60,8 @@
   --accent: oklch(0.7 0.062 78);
   --accent-foreground: oklch(0.17 0.006 60);
   --accent-soft: oklch(0.76 0.055 82);
+  --hero-cover: oklch(0.13 0.006 60);
+  --hero-smoke: oklch(0.94 0.012 85 / 20%);
   --destructive: oklch(0.577 0.2 27);
   --destructive-foreground: oklch(0.96 0.008 85);
   --border: oklch(0.32 0.009 70);
@@ -168,5 +170,112 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@utility hero-opacity-cover {
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--hero-cover) 0%,
+    transparent 38%,
+    transparent 62%,
+    var(--hero-cover) 100%
+  );
+  opacity: 0.82;
+}
+
+@utility hero-focus {
+  animation: hero-focus-pull 11s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  transform-origin: center;
+  will-change: filter, transform;
+}
+
+@utility hero-focus-delayed {
+  animation-delay: -5.5s;
+}
+
+@utility hero-smoke {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@utility hero-smoke-wisp {
+  position: absolute;
+  left: -35%;
+  bottom: -18%;
+  width: 88%;
+  height: 52%;
+  border-radius: 50%;
+  background: var(--hero-smoke);
+  filter: blur(46px);
+  opacity: 0;
+  animation: hero-smoke-drift 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@utility hero-smoke-wisp-one {
+  animation-delay: -1s;
+}
+
+@utility hero-smoke-wisp-two {
+  bottom: 18%;
+  width: 68%;
+  height: 38%;
+  animation-delay: -4s;
+  animation-duration: 12s;
+}
+
+@utility hero-smoke-wisp-three {
+  bottom: 48%;
+  width: 58%;
+  height: 30%;
+  animation-delay: -7s;
+  animation-duration: 14s;
+}
+
+@keyframes hero-focus-pull {
+  0%,
+  100% {
+    filter: blur(0);
+    transform: scale(1.025);
+  }
+  38%,
+  62% {
+    filter: blur(4px);
+    transform: scale(1.06);
+  }
+  76% {
+    filter: blur(0);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes hero-smoke-drift {
+  0% {
+    opacity: 0;
+    transform: translate3d(-8%, 14%, 0) scale(0.85) rotate(-6deg);
+  }
+  24% {
+    opacity: 0.45;
+  }
+  68% {
+    opacity: 0.22;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(175%, -80%, 0) scale(1.45) rotate(12deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-focus,
+  .hero-smoke-wisp {
+    animation: none;
   }
 }

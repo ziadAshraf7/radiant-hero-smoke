@@ -32,6 +32,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "A premium interior and exterior design studio. Design. Craft. Inspire.",
       },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -50,15 +52,20 @@ function Home() {
       {/* Hero */}
       <section className="relative pt-20">
         <div className="grid min-h-[78vh] grid-cols-1 lg:grid-cols-[35fr_30fr_35fr]">
-          <div className="relative order-2 h-72 lg:order-1 lg:h-auto">
+          <div className="hero-visual hero-visual-left relative order-2 h-72 overflow-hidden lg:order-1 lg:h-auto">
             <img
               src={images.heroLiving}
               alt="Warm neutral living room with layered cushions and wood-slat wall"
               width={1024}
               height={1536}
-              className="h-full w-full object-cover"
+              className="hero-focus h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-background/25" />
+            <div className="hero-opacity-cover absolute inset-0" />
+            <div className="hero-smoke" aria-hidden="true">
+              <span className="hero-smoke-wisp hero-smoke-wisp-one" />
+              <span className="hero-smoke-wisp hero-smoke-wisp-two" />
+              <span className="hero-smoke-wisp hero-smoke-wisp-three" />
+            </div>
           </div>
 
           <div className="order-1 flex flex-col items-center justify-center px-6 py-20 text-center lg:order-2 lg:py-0">
@@ -81,16 +88,21 @@ function Home() {
             </div>
           </div>
 
-          <div className="relative order-3 h-72 lg:h-auto">
+          <div className="hero-visual hero-visual-right relative order-3 h-72 overflow-hidden lg:h-auto">
             <img
               src={images.heroKitchen}
               alt="Moody kitchen with marble waterfall island and pendant lighting"
               loading="lazy"
               width={1024}
               height={1536}
-              className="h-full w-full object-cover"
+              className="hero-focus hero-focus-delayed h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-background/25" />
+            <div className="hero-opacity-cover absolute inset-0" />
+            <div className="hero-smoke" aria-hidden="true">
+              <span className="hero-smoke-wisp hero-smoke-wisp-one" />
+              <span className="hero-smoke-wisp hero-smoke-wisp-two" />
+              <span className="hero-smoke-wisp hero-smoke-wisp-three" />
+            </div>
           </div>
         </div>
 
