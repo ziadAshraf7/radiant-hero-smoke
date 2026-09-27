@@ -14,10 +14,17 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminHome,
 });
 
-async function count(table: "profiles" | "projects" | "services" | "testimonials" | "faqs", pending = false) {
-  let q = supabase.from(table).select("*", { count: "exact", head: true });
-  if (pending) q = q.eq("status", "pending");
-  return (await q).count ?? 0;
+async function count(table: "profiles" | "projects" | "services" | "testimonials" | "faqs") {
+  return (await supabase.from(table).select("*", { count: "exact", head: true })).count ?? 0;
+}
+
+async function countPendingTestimonials() {
+  return (
+    await supabase
+      .from("testimonials")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending")
+  ).count ?? 0;
 }
 
 function AdminHome() {
@@ -29,7 +36,7 @@ function AdminHome() {
         count("projects"),
         count("services"),
         count("testimonials"),
-        count("testimonials", true),
+        countPendingTestimonials(),
         count("faqs"),
       ]);
       return { users, projects, services, testimonials, pending, faqs };
