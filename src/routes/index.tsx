@@ -51,8 +51,8 @@ function Home() {
     <>
       {/* Hero */}
       <section className="relative pt-20">
-        <div className="grid min-h-[78vh] grid-cols-1 lg:grid-cols-[35fr_30fr_35fr]">
-          <div className="hero-visual hero-visual-left relative order-2 h-72 overflow-hidden lg:order-1 lg:h-auto">
+        <div className="relative grid min-h-[78vh] grid-cols-2 overflow-hidden lg:grid-cols-[35fr_30fr_35fr]">
+          <div className="hero-visual hero-visual-left absolute inset-y-0 left-0 w-1/2 overflow-hidden lg:relative lg:inset-auto lg:order-1 lg:w-auto">
             <img
               src={images.heroLiving}
               alt="Warm neutral living room with layered cushions and wood-slat wall"
@@ -68,7 +68,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="order-1 flex flex-col items-center justify-center px-6 py-20 text-center lg:order-2 lg:py-0">
+          <div className="relative z-10 col-span-2 flex flex-col items-center justify-center px-6 py-20 text-center lg:order-2 lg:col-span-1 lg:py-0">
             <div className="fade-up flex flex-col items-center">
               <p className="eyebrow">Bespoke Interiors • Timeless Spaces</p>
               <h1 className="mt-8 text-6xl leading-[1.05] md:text-7xl">
@@ -88,7 +88,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="hero-visual hero-visual-right relative order-3 h-72 overflow-hidden lg:h-auto">
+          <div className="hero-visual hero-visual-right absolute inset-y-0 right-0 w-1/2 overflow-hidden lg:relative lg:inset-auto lg:order-3 lg:w-auto">
             <img
               src={images.heroKitchen}
               alt="Moody kitchen with marble waterfall island and pendant lighting"
