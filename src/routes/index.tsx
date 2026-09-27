@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Armchair, Leaf, Box, Circle } from "lucide-react";
+import { useEffect } from "react";
 import {
   images,
   projects,
@@ -46,9 +47,37 @@ const features = [
   { Icon: Circle, title: "Timeless Elegance", text: "Spaces that are beautiful today and for years to come." },
 ];
 
+function ScrollReveals() {
+  useEffect(() => {
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    document.body.classList.add("motion-ready");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -10%", threshold: 0.08 },
+    );
+
+    revealItems.forEach((item) => observer.observe(item));
+
+    return () => {
+      observer.disconnect();
+      document.body.classList.remove("motion-ready");
+    };
+  }, []);
+
+  return null;
+}
+
 function Home() {
   return (
     <>
+      <ScrollReveals />
       {/* Hero */}
       <section className="relative pt-20">
         <div className="relative grid min-h-[78vh] grid-cols-2 overflow-hidden lg:grid-cols-[35fr_30fr_35fr]">
@@ -69,7 +98,7 @@ function Home() {
           </div>
 
           <div className="relative z-10 col-span-2 flex flex-col items-center justify-center px-6 py-20 text-center lg:order-2 lg:col-span-1 lg:py-0">
-            <div className="fade-up flex flex-col items-center">
+            <div className="hero-copy-reveal flex flex-col items-center">
               <p className="eyebrow">Bespoke Interiors • Timeless Spaces</p>
               <h1 className="mt-8 text-6xl leading-[1.05] md:text-7xl">
                 Design.
@@ -111,7 +140,7 @@ function Home() {
           <div className="mx-auto grid max-w-[1600px] gap-12 px-6 py-14 lg:grid-cols-2 lg:px-10">
             <div className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
               {features.map(({ Icon, title, text }) => (
-                <div key={title}>
+                <div key={title} data-reveal className="reveal-rise reveal-stagger">
                   <Icon size={22} strokeWidth={1} className="text-accent" />
                   <p className="label-caps mt-5">{title}</p>
                   <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{text}</p>
@@ -121,7 +150,7 @@ function Home() {
 
             <div className="-mx-6 flex snap-x gap-3 overflow-x-auto px-6 pb-2 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">
               {projects.map((p) => (
-                <div key={p.id} className="w-56 shrink-0 snap-start lg:w-auto">
+                <div key={p.id} data-reveal className="reveal-image reveal-stagger w-56 shrink-0 snap-start lg:w-auto">
                   <ProjectCard project={p} />
                 </div>
               ))}
@@ -135,7 +164,7 @@ function Home() {
       </section>
 
       {/* Featured projects */}
-      <section className="mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
+      <section data-reveal className="reveal-rise mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
         <SectionHeading
           eyebrow="Selected work"
           title="A portfolio built on restraint"
@@ -143,7 +172,9 @@ function Home() {
         />
         <div className="mt-16 grid gap-4 md:grid-cols-2">
           {projects.map((p) => (
-            <ProjectCard key={p.id} project={p} />
+            <div key={p.id} data-reveal className="reveal-image reveal-stagger">
+              <ProjectCard project={p} />
+            </div>
           ))}
         </div>
         <div className="mt-12 flex justify-center">
@@ -154,7 +185,7 @@ function Home() {
       </section>
 
       {/* Expertise */}
-      <section className="border-y border-border bg-surface">
+      <section data-reveal className="reveal-rise border-y border-border bg-surface">
         <div className="mx-auto grid max-w-[1600px] gap-16 px-6 py-28 lg:grid-cols-[1fr_1.2fr] lg:px-10">
           <SectionHeading
             align="left"
@@ -164,7 +195,7 @@ function Home() {
           />
           <div className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
             {expertise.map((e) => (
-              <div key={e.title} className="border-t border-border pt-6">
+              <div key={e.title} data-reveal className="reveal-line reveal-stagger border-t border-border pt-6">
                 <p className="label-caps">{e.title}</p>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{e.text}</p>
               </div>
@@ -174,11 +205,11 @@ function Home() {
       </section>
 
       {/* Process */}
-      <section className="mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
+      <section data-reveal className="reveal-rise mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
         <SectionHeading eyebrow="Design process" title="Six steps, no surprises" />
         <div className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {processSteps.map((s) => (
-            <div key={s.no} className="border-t border-border pt-6">
+            <div key={s.no} data-reveal className="reveal-line reveal-stagger border-t border-border pt-6">
               <p className="font-display text-3xl text-accent">{s.no}</p>
               <p className="label-caps mt-4">{s.title}</p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
@@ -188,7 +219,7 @@ function Home() {
       </section>
 
       {/* Before & after */}
-      <section className="border-y border-border bg-surface">
+      <section data-reveal className="reveal-rise border-y border-border bg-surface">
         <div className="mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
           <SectionHeading
             eyebrow="Before & after"
@@ -197,7 +228,9 @@ function Home() {
           />
           <div className="mt-16 grid gap-4 lg:grid-cols-2">
             {transformations.slice(0, 2).map((t) => (
-              <BeforeAfter key={t.id} {...t} />
+              <div key={t.id} data-reveal className="reveal-image reveal-stagger">
+                <BeforeAfter {...t} />
+              </div>
             ))}
           </div>
           <div className="mt-12 flex justify-center">
@@ -209,7 +242,7 @@ function Home() {
       </section>
 
       {/* Services */}
-      <section className="mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
+      <section data-reveal className="reveal-rise mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
         <SectionHeading eyebrow="Services" title="How we can help" />
         <div className="mt-16 grid gap-x-10 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
@@ -217,7 +250,8 @@ function Home() {
               key={s.slug}
               to="/services/$slug"
               params={{ slug: s.slug }}
-              className="group border-t border-border pt-6"
+              data-reveal
+              className="reveal-line reveal-stagger group border-t border-border pt-6"
             >
               <p className="label-caps group-hover:text-accent">{s.title}</p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.excerpt}</p>
@@ -228,12 +262,12 @@ function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="border-y border-border bg-surface">
+      <section data-reveal className="reveal-rise border-y border-border bg-surface">
         <div className="mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
           <SectionHeading eyebrow="Client voices" title="What clients say" />
           <div className="mt-16 grid gap-10 md:grid-cols-2">
             {testimonials.slice(0, 2).map((t) => (
-              <blockquote key={t.name} className="border-l border-accent pl-8">
+              <blockquote key={t.name} data-reveal className="reveal-rise reveal-stagger border-l border-accent pl-8">
                 <p className="font-display text-2xl leading-snug">“{t.quote}”</p>
                 <footer className="mt-6">
                   <p className="label-caps">{t.name}</p>
@@ -251,12 +285,12 @@ function Home() {
       </section>
 
       {/* FAQ preview */}
-      <section className="mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
+      <section data-reveal className="reveal-rise mx-auto max-w-[1600px] px-6 py-28 lg:px-10">
         <div className="grid gap-16 lg:grid-cols-[1fr_1.2fr]">
           <SectionHeading align="left" eyebrow="FAQ" title="Good to know" />
           <div>
             {faqs.slice(0, 4).map((f) => (
-              <div key={f.question} className="border-b border-border py-6">
+              <div key={f.question} data-reveal className="reveal-line reveal-stagger border-b border-border py-6">
                 <p className="label-caps">{f.question}</p>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.answer}</p>
               </div>
@@ -268,7 +302,9 @@ function Home() {
         </div>
       </section>
 
-      <CtaBand />
+      <div data-reveal className="reveal-rise">
+        <CtaBand />
+      </div>
     </>
   );
 }
