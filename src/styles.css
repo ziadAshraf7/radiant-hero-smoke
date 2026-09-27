@@ -61,7 +61,7 @@
   --accent-foreground: oklch(0.17 0.006 60);
   --accent-soft: oklch(0.76 0.055 82);
   --hero-cover: oklch(0.13 0.006 60);
-  --hero-smoke: oklch(0.94 0.012 85 / 20%);
+  --hero-smoke: oklch(0.94 0.012 85 / 32%);
   --destructive: oklch(0.577 0.2 27);
   --destructive-foreground: oklch(0.96 0.008 85);
   --border: oklch(0.32 0.009 70);
@@ -314,6 +314,15 @@
   animation-duration: 14s;
 }
 
+@utility hero-smoke-wisp-four {
+  left: -18%;
+  bottom: 6%;
+  width: 74%;
+  height: 42%;
+  animation-delay: -11s;
+  animation-duration: 10s;
+}
+
 @keyframes hero-focus-pull {
   0%,
   100% {
@@ -337,10 +346,10 @@
     transform: translate3d(-8%, 14%, 0) scale(0.85) rotate(-6deg);
   }
   24% {
-    opacity: 0.45;
+    opacity: 0.68;
   }
   68% {
-    opacity: 0.22;
+    opacity: 0.4;
   }
   100% {
     opacity: 0;
