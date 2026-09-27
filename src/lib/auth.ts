@@ -12,6 +12,15 @@ export function useSession() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const hasAuthConnection = Boolean(
+      import.meta.env["VITE_SUPABASE_URL"] && import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"],
+    );
+
+    if (!hasAuthConnection) {
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
