@@ -52,20 +52,48 @@ function ScrollReveals() {
     const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
     document.body.classList.add("motion-ready");
 
+    const reveal = (item: HTMLElement) => {
+      item.classList.add("is-revealed");
+    };
+
+    const revealPassedItems = () => {
+      const revealLine = window.innerHeight * 0.94;
+      revealItems.forEach((item) => {
+        if (item.classList.contains("is-revealed")) return;
+        if (item.getBoundingClientRect().top <= revealLine) {
+          reveal(item);
+          observer.unobserve(item);
+        }
+      });
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-revealed");
+          reveal(entry.target as HTMLElement);
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -10%", threshold: 0.08 },
+      { rootMargin: "0px 0px -6%", threshold: 0.01 },
     );
 
     revealItems.forEach((item) => observer.observe(item));
+    revealPassedItems();
+
+    let frame = 0;
+    const handleScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        revealPassedItems();
+      });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
       observer.disconnect();
       document.body.classList.remove("motion-ready");
     };
