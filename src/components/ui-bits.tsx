@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import type { Project } from "@/data/site";
 
 export function GoldDivider({ className = "" }: { className?: string }) {
@@ -138,21 +138,100 @@ export function BeforeAfter({
   title: string;
   text: string;
 }) {
+  const [pos, setPos] = useState(50);
+  const dragging = useRef(false);
+
+  const setFromClientX = (clientX: number, el: HTMLElement | null) => {
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    setPos(Math.min(100, Math.max(0, pct)));
+  };
+
   return (
     <div className="group bg-surface">
-      <div className="grid grid-cols-2">
-        <figure className="relative">
-          <img src={before} alt={`${title} before`} loading="lazy" width={1280} height={960} className="aspect-[4/3] w-full object-cover opacity-70" />
-          <figcaption className="label-caps absolute bottom-3 left-3 bg-background/70 px-3 py-1 text-muted-foreground">
-            Before
-          </figcaption>
-        </figure>
-        <figure className="relative">
-          <img src={after} alt={`${title} after`} loading="lazy" width={1280} height={960} className="aspect-[4/3] w-full object-cover" />
-          <figcaption className="label-caps absolute bottom-3 left-3 bg-accent px-3 py-1 text-accent-foreground">
-            After
-          </figcaption>
-        </figure>
+      <div
+        className="relative aspect-[4/3] touch-none select-none overflow-hidden"
+        onPointerDown={(e) => {
+          dragging.current = true;
+          setFromClientX(e.clientX, e.currentTarget);
+          try {
+            e.currentTarget.setPointerCapture(e.pointerId);
+          } catch {
+            // capture is best-effort; dragging still works inside the image
+          }
+        }}
+        onPointerMove={(e) => {
+          if (dragging.current) setFromClientX(e.clientX, e.currentTarget);
+        }}
+        onPointerUp={() => {
+          dragging.current = false;
+        }}
+        onPointerCancel={() => {
+          dragging.current = false;
+        }}
+        style={{ cursor: "ew-resize" }}
+      >
+        <img
+          src={after}
+          alt={`${title} after`}
+          loading="lazy"
+          width={1280}
+          height={960}
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
+        >
+          <img
+            src={before}
+            alt={`${title} before`}
+            loading="lazy"
+            width={1280}
+            height={960}
+            draggable={false}
+            className="h-full w-full object-cover"
+          />
+        </div>
+
+        <span className="label-caps pointer-events-none absolute bottom-3 left-3 bg-background/70 px-3 py-1 text-muted-foreground">
+          Before
+        </span>
+        <span className="label-caps pointer-events-none absolute bottom-3 right-3 bg-accent px-3 py-1 text-accent-foreground">
+          After
+        </span>
+
+        <div
+          className="pointer-events-none absolute inset-y-0 w-px bg-accent"
+          style={{ left: `${pos}%` }}
+        >
+          <div
+            role="slider"
+            tabIndex={0}
+            aria-label={`Compare before and after: ${title}`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(pos)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                setPos((p) => Math.max(0, p - 2));
+              } else if (e.key === "ArrowRight") {
+                e.preventDefault();
+                setPos((p) => Math.min(100, p + 2));
+              }
+            }}
+            className="pointer-events-auto absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-accent bg-background/80 text-accent shadow-lg outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="m9 18-6-6 6-6" />
+              <path d="m15 6 6 6-6 6" />
+            </svg>
+          </div>
+        </div>
       </div>
       <div className="px-6 py-6">
         <p className="label-caps">{title}</p>
