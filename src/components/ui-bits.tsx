@@ -204,23 +204,30 @@ export function BeforeAfter({
           className="pointer-events-none absolute inset-y-0 w-px bg-accent"
           style={{ left: `${pos}%` }}
         >
-          <span className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-accent bg-background/80 text-accent shadow-lg">
+          <div
+            role="slider"
+            tabIndex={0}
+            aria-label={`Compare before and after: ${title}`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(pos)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                setPos((p) => Math.max(0, p - 2));
+              } else if (e.key === "ArrowRight") {
+                e.preventDefault();
+                setPos((p) => Math.min(100, p + 2));
+              }
+            }}
+            className="pointer-events-auto absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-accent bg-background/80 text-accent shadow-lg outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m9 18-6-6 6-6" />
               <path d="m15 6 6 6-6 6" />
             </svg>
-          </span>
+          </div>
         </div>
-
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={Math.round(pos)}
-          onChange={(e) => setPos(Number(e.target.value))}
-          aria-label={`Compare before and after: ${title}`}
-          className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
-        />
       </div>
       <div className="px-6 py-6">
         <p className="label-caps">{title}</p>
