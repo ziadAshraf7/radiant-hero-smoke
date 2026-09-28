@@ -155,8 +155,12 @@ export function BeforeAfter({
         className="relative aspect-[4/3] touch-none select-none overflow-hidden"
         onPointerDown={(e) => {
           dragging.current = true;
-          e.currentTarget.setPointerCapture(e.pointerId);
           setFromClientX(e.clientX, e.currentTarget);
+          try {
+            e.currentTarget.setPointerCapture(e.pointerId);
+          } catch {
+            // capture is best-effort; dragging still works inside the image
+          }
         }}
         onPointerMove={(e) => {
           if (dragging.current) setFromClientX(e.clientX, e.currentTarget);
