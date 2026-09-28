@@ -122,6 +122,7 @@ function Home() {
               <span className="hero-smoke-wisp hero-smoke-wisp-one" />
               <span className="hero-smoke-wisp hero-smoke-wisp-two" />
               <span className="hero-smoke-wisp hero-smoke-wisp-three" />
+              <span className="hero-smoke-wisp hero-smoke-wisp-four" />
             </div>
           </div>
 
@@ -159,6 +160,7 @@ function Home() {
               <span className="hero-smoke-wisp hero-smoke-wisp-one" />
               <span className="hero-smoke-wisp hero-smoke-wisp-two" />
               <span className="hero-smoke-wisp hero-smoke-wisp-three" />
+              <span className="hero-smoke-wisp hero-smoke-wisp-four" />
             </div>
           </div>
         </div>
