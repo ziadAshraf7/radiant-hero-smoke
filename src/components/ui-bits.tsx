@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import type { Project } from "@/data/site";
 
 export function GoldDivider({ className = "" }: { className?: string }) {
